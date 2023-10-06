@@ -1,68 +1,48 @@
 @IsTest
-private class ShippingInvoiceTest {
-    @IsTest
-    static void testBulkItemInsert() {
-        // first, create test invoices
+private class TestShippingInvoice{
 
-        // instantiate a new Shipping_invoice__c object
-        Shipping_invoice__c order1 = new Shipping_invoice__c(
-            subtotal__c = 0,
-            TotalWeight__c = 0,
-            GrandTotal__c = 0,
-            ShippingDiscount__c = 0,
-            Shipping__c = 0,
-            Tax__c = 0
-        );
+    // Test for inserting three items at once
+    public static testmethod void testBulkItemInsert(){
+        // Create the shipping invoice. It's a best practice to either use defaults
+        // or to explicitly set all values to zero so as to avoid having
+        // extraneous data in your test.
+        Shipping_Invoice__C order1 = new Shipping_Invoice__C(subtotal__c = 0, 
+                          totalweight__c = 0, grandtotal__c = 0, 
+                          ShippingDiscount__c = 0, Shipping__c = 0, tax__c = 0);
 
-        // insert the order
+        // Insert the order and populate with items
         insert order1;
-
-        // create a new list of items
-        List<Item__c> list1 = new List<Item_c>();
-
-        Item__c item1 = new Item__c(
-            Name = 'item1',
-            Price__c = 10.0,
-            Quantity__c = 1,
-            Shipping_invoice__c=order1.id,
-            Weight__c = 1.0
-        );
-
-        Item__c item2 = new Item__c(
-            Name = 'item2',
-            Price__c = 20.0,
-            Quantity__c = 2,
-            Shipping_invoice__c=order1.id,
-            Weight__c = 2.0
-        );
-
-        Item__c item3 = new Item__c(
-            Name = 'item3',
-            Price__c = 40.0,
-            Quantity__c = 3,
-            Shipping_invoice__c=order1.id,
-            Weight__c = 3.0
-        );
-
-        // add the new items to itemList
-
-        itemList.add(item1);
-        itemList.add(item2);
-        itemList.add(item3);
-        insert itemList;
-
-        // now order1 should have 3 items on it, with a total cost of $70
-        // i.e., less than the discount amount.
-
-        // retrieve the Shipping_invoice__c object using SOQL, 
-        // and test assertions
+        List<Item__c> list1 = new List<Item__c>();
+        Item__c item1 = new Item__C(Price__c = 10, weight__c = 1, quantity__c = 1, 
+                                    Shipping_Invoice__C = order1.id);
+        Item__c item2 = new Item__C(Price__c = 25, weight__c = 2, quantity__c = 1, 
+                                    Shipping_Invoice__C = order1.id);
+        Item__c item3 = new Item__C(Price__c = 40, weight__c = 3, quantity__c = 1, 
+                                    Shipping_Invoice__C = order1.id);
+        list1.add(item1);
+        list1.add(item2);
+        list1.add(item3);
+        insert list1;
         
-        order1 = [SELECT id, subtotal__c, TotalWeight__c, GrandTotal__c,
-                  ShippingDiscount__c, Shipping__c, Tax__c FROM Shipping_invoice__c
+        // Retrieve the order, then do assertions
+        order1 = [SELECT id, subtotal__c, tax__c, shipping__c, totalweight__c, 
+                  grandtotal__c, shippingdiscount__c 
+                  FROM Shipping_Invoice__C 
                   WHERE id = :order1.id];
         
-        System.debug(order1);
-        System.assert(order1 == order1);
-
+        System.assert(order1.subtotal__c == 75, 
+                'Order subtotal was not $75, but was '+ order1.subtotal__c);
+        System.assert(order1.tax__c == 6.9375, 
+                'Order tax was not $6.9375, but was ' + order1.tax__c);
+        System.assert(order1.shipping__c == 4.50, 
+                'Order shipping was not $4.50, but was ' + order1.shipping__c);
+        System.assert(order1.totalweight__c == 6.00, 
+                'Order weight was not 6 but was ' + order1.totalweight__c);
+        System.assert(order1.grandtotal__c == 86.4375, 
+                'Order grand total was not $86.4375 but was ' 
+                 + order1.grandtotal__c);
+        System.assert(order1.shippingdiscount__c == 0, 
+                'Order shipping discount was not $0 but was ' 
+                + order1.shippingdiscount__c);
     }
 }
