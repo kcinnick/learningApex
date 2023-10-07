@@ -121,4 +121,82 @@ private class TestShippingInvoice{
                 0, order1.shippingdiscount__c, 'Shipping discount was '
         );
     }
+
+    public static testmethod void testBulkItemDelete(){
+        // instantiate a new Shipping_invoice__c object
+        Shipping_invoice__c order1 = new Shipping_invoice__c(
+                subtotal__c = 0, totalweight__c = 0, grandtotal__c = 0,
+                shippingdiscount__c = 0, shipping__c = 0, tax__c = 0
+        );
+
+        insert order1; // think of `insert` as `committing` the changes
+        List<Item__c> list1 = new List<Item__c>();
+        Item__c item1 = new Item__c(
+                Price__c = 10, weight__c = 1, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c item2 = new Item__c(
+                Price__c = 25, weight__c = 2, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c item3 = new Item__c(
+                Price__c = 40, weight__c = 3, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c itemA = new Item__c(
+                Price__c = 1, weight__c = 3, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c itemB = new Item__c(
+                Price__c = 1, weight__c = 3, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c itemC = new Item__c(
+                Price__c = 1, weight__c = 3, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c itemD = new Item__c(
+                Price__c = 1, weight__c = 3, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        List<Item__c> additionalItems = new List<Item__c>{
+                item1, item2, item3, itemA, itemB, itemC, itemD
+        };
+        list1.addAll(additionalItems);
+        insert list1; // `commits` the addAll
+
+        // seven items are now in the shipping invoice.
+        // let's delete four of them
+
+        List<Item__c> deleteList = new List<Item__c>{
+                itemA, itemB, itemC, itemD
+        };
+        delete deleteList;
+
+        order1 = [SELECT id, subtotal__c, tax__c, shipping__c,
+                  totalweight__c, grandtotal__c, shippingdiscount__c
+                  FROM Shipping_invoice__c
+                  WHERE Id = :order1.Id];
+        
+        assertDecimalEquals(
+                75.0, order1.subtotal__c,
+                'Order subtotal was '
+        );
+        assertDecimalEquals(
+                6.9375, order1.tax__c,
+                'Order tax was '
+        );
+        assertDecimalEquals(
+                4.50, order1.shipping__c,
+                'Order shipping was '
+        );
+        assertDecimalEquals(
+                86.4375, order1.grandtotal__c,
+                'Grand total was '
+        );
+        assertDecimalEquals(
+                0, order1.shippingdiscount__c,
+                'Shipping discount was '
+        );
+    }
 }
