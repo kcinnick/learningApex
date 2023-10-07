@@ -56,4 +56,69 @@ private class TestShippingInvoice{
                 0, order1.shippingdiscount__c, 'Shipping discount was '
         );
     }
+
+    public static testmethod void testBulkItemUpdate() {
+
+        // Instantiate the Shipping_invoice__c object we'll use in the test
+        Shipping_invoice__c  order1 = new Shipping_invoice__c(
+                subtotal__c = 0, totalweight__c = 0,
+                grandtotal__c = 0, shippingdiscount__c = 0
+        );
+
+        // insert the order
+        insert order1;
+        // instantiate a new list of Item__c objects
+        List<Item__c> list1 = new List<Item__c>();
+        // instantiate some new Item__c objects
+        Item__c item1 = new Item__c(
+                Price__c = 1, weight__c = 1, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c item2 = new Item__c(
+                Price__c = 2, weight__c = 2, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c item3 = new Item__c(
+                Price__c = 4, weight__c = 3, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        // add the new items to the list we instantiated earlier
+        list1.add(item1);
+        list1.add(item2);
+        list1.add(item3);
+        // these objects only exist in-memory until the insert
+        insert list1;
+
+        // update the prices of the 3 items
+        list1[0].price__c = 10;
+        list1[1].price__c = 25;
+        list1[2].price__c = 40;
+        // these object prices have only been updated in memory
+        update list1;
+        // now they have been updated/'committed'
+
+        // Access the order and assert the items updated.
+        order1 = [SELECT id, subtotal__c, tax__c, shipping__c,
+                  totalweight__c, grandtotal__c, shippingdiscount__c
+                  FROM Shipping_invoice__c WHERE Id = :order1.Id];
+        
+        assertDecimalEquals(
+                75.0, order1.subtotal__c, 'Subtotal was '
+        );
+        assertDecimalEquals(
+                6.9375, order1.tax__c, 'Tax was '
+        );
+        assertDecimalEquals(
+                4.50, order1.shipping__c, 'Shipping was '
+        );
+        assertDecimalEquals(
+                6.0, order1.totalweight__c, 'Total weight was '
+        );
+        assertDecimalEquals(
+                86.4375, order1.grandtotal__c, 'Grand total was '
+        );
+        assertDecimalEquals(
+                0, order1.shippingdiscount__c, 'Shipping discount was '
+        );
+    }
 }
