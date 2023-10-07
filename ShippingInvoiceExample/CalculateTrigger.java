@@ -1,4 +1,4 @@
-trigger calculate on Item__c (before insert, after update, after delete) {
+trigger calculate on Item__c (after insert, after update, after delete) {
     // Use a map to avoid duplicate entries
 
     Map<ID, Shipping_invoice__c> updateMap = new Map<ID, Shipping_invoice__c>();

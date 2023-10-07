@@ -1,5 +1,12 @@
+
+
 @IsTest
 private class TestShippingInvoice{
+
+    public static void assertDecimalEquals(Decimal expected, Decimal actual, String message) {
+        System.assert(expected == actual, message + ' Expected: ' + expected + ', Actual: ' + actual);
+        System.debug(message + ' Expected: ' + expected + ', Actual: ' + actual + ' (Test Passed)');
+    }
 
     // Test for inserting three items at once
     public static testmethod void testBulkItemInsert(){
@@ -30,19 +37,23 @@ private class TestShippingInvoice{
                   FROM Shipping_Invoice__C 
                   WHERE id = :order1.id];
         
-        System.assert(order1.subtotal__c == 75, 
-                'Order subtotal was not $75, but was '+ order1.subtotal__c);
-        System.assert(order1.tax__c == 6.9375, 
-                'Order tax was not $6.9375, but was ' + order1.tax__c);
-        System.assert(order1.shipping__c == 4.50, 
-                'Order shipping was not $4.50, but was ' + order1.shipping__c);
-        System.assert(order1.totalweight__c == 6.00, 
-                'Order weight was not 6 but was ' + order1.totalweight__c);
-        System.assert(order1.grandtotal__c == 86.4375, 
-                'Order grand total was not $86.4375 but was ' 
-                 + order1.grandtotal__c);
-        System.assert(order1.shippingdiscount__c == 0, 
-                'Order shipping discount was not $0 but was ' 
-                + order1.shippingdiscount__c);
+        assertDecimalEquals(
+                75.0, order1.subtotal__c, 'Order subtotal was '
+        );
+        assertDecimalEquals(
+                6.9375, order1.tax__c, 'Tax was '
+        );
+        assertDecimalEquals(
+                4.50, order1.shipping__c, 'Shipping was '
+        );
+        assertDecimalEquals(
+                6.00, order1.totalweight__c, 'Total was '
+        );
+        assertDecimalEquals(
+                86.4375, order1.grandtotal__c, 'Grand total was '
+        );
+        assertDecimalEquals(
+                0, order1.shippingdiscount__c, 'Shipping discount was '
+        );
     }
 }
