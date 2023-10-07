@@ -142,8 +142,6 @@ trigger calculate on Item__c (after insert, after update, after delete) {
             // that we instantiated earlier in the script
 
             updateMap.put(myOrder.id, myOrder);
-            System.debug('UpdateMap: ' + updateMap);
-            System.debug('UpdateMap2: ' + updateMap);
         }
     }
 
