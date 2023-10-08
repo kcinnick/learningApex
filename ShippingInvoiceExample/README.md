@@ -1,7 +1,3 @@
-Absolutely, a good README is like a great tour guide; it should show you around and make sure you know what's going on without overwhelming you. Here it is:
-
----
-
 # Apex Shipping Calculator
 
 ## Table of Contents
