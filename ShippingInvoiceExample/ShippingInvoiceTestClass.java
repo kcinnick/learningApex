@@ -283,4 +283,66 @@ private class TestShippingInvoice{
                 -19.50, order1.shippingdiscount__c, 'Shipping discount was '
         );
     }
+
+    public static testmethod void testNegativeTests() {
+        Shipping_invoice__c order1 = new Shipping_invoice__c(
+                subtotal__c = 0, totalweight__c = 0, grandtotal__c = 0,
+                shippingdiscount__c = 0, shipping__c = 0, tax__c = 0
+        );
+
+        // insert the order and populate it with items
+        insert order1;
+        Item__c item1 = new Item__c(
+                Price__c = -10, weight__c = 1, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c item2 = new Item__c(
+                Price__c = 25, weight__c = -2, quantity__c = 1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c item3 = new Item__c(
+                Price__c = 40, weight__c = 3, quantity__c = -1,
+                Shipping_invoice__c = order1.id
+        );
+        Item__c item4 = new Item__c(
+                Price__c = 40, weight__c = 3, quantity__c = 0,
+                Shipping_invoice__c = order1.id
+        );
+
+        try {
+                insert item1;
+        } catch (Exception e) {
+                System.assert(
+                        e.getMessage().contains('Price must be non-negative'),
+                        'Price was negative but was not caught.'
+                );
+        }
+
+        try {
+                insert item2;
+        } catch (Exception e) {
+                System.assert(
+                        e.getMessage().contains('Weight must be non-negative'),
+                        'Weight was negative but was not caught.'
+                );
+        }
+
+        try {
+                insert item3;
+        } catch (Exception e) {
+                System.assert(
+                        e.getMessage().contains('Quantity must be positive'),
+                        'Quantity was negative but was not caught.'
+                );
+        }
+
+        try {
+                insert item4;
+        } catch (Exception e) {
+                System.assert(
+                        e.getMessage().contains('Quantity must be positive'),
+                        'Quantity was zero but was not caught.'
+                );
+        }
+    }
 }
