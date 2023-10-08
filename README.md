@@ -72,7 +72,3 @@ Feel free to fork this project, open issues, or submit pull requests. Your contr
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
-
----
-
-This README is like your favorite combo meal: it's got a bit of everything, and it's organized so you can easily find what you're looking for. Feel free to customize it as you add more delicious content to your repo!
