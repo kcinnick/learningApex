@@ -62,7 +62,3 @@ Feel free to open issues or create pull requests to improve the calculator or ad
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
-
----
-
-Feel free to adjust this to better fit your project's specifics. Hope that helps! Anything else?
