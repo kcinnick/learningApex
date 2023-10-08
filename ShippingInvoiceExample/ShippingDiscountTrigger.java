@@ -1,4 +1,4 @@
-trigger ShippingDiscount on Shipping_invoice__c (after update) {
+trigger ShippingDiscount on Shipping_invoice__c (before update) {
     System.debug('Trigger.new size: ' + Trigger.new.size());
     System.debug('Trigger.new: ' + Trigger.new);
 
@@ -31,7 +31,9 @@ trigger ShippingDiscount on Shipping_invoice__c (after update) {
                 // first we make the amount of shipping negative
                 // then we'll add that negative number to the 
                 // grand total to cancel out the shipping cost
+                System.debug('GrandTotal before discount applied ' + myShippingInvoice.GrandTotal__c);
                 myShippingInvoice.GrandTotal__c += myShippingInvoice.ShippingDiscount__c;
+                System.debug('GrandTotal after discount applied ' + myShippingInvoice.GrandTotal__c);
                 // now the grand total is ex-any shipping costs.
         } else {
                 System.debug('myShippingInvoice.Subtotal__c < 100.00 && myShippingInvoice.ShippingDiscount__c == 0' + myShippingInvoice);
