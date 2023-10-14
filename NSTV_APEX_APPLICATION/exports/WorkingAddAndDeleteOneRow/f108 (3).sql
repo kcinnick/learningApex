@@ -33,7 +33,7 @@ prompt APPLICATION 108 - NSTV
 -- Application Export:
 --   Application:     108
 --   Name:            NSTV
---   Date and Time:   04:05 Saturday October 14, 2023
+--   Date and Time:   04:28 Saturday October 14, 2023
 --   Exported By:     LOWCODE
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -123,7 +123,7 @@ wwv_imp_workspace.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'NSTV'
 ,p_last_updated_by=>'LOWCODE'
-,p_last_upd_yyyymmddhh24miss=>'20231014040019'
+,p_last_upd_yyyymmddhh24miss=>'20231014042750'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>6
 ,p_print_server_type=>'NATIVE'
@@ -26266,7 +26266,7 @@ wwv_flow_imp_page.create_page(
 ,p_read_only_when_type=>'ALWAYS'
 ,p_page_component_map=>'21'
 ,p_last_updated_by=>'LOWCODE'
-,p_last_upd_yyyymmddhh24miss=>'20231014040019'
+,p_last_upd_yyyymmddhh24miss=>'20231014042750'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(10844266651956893)
@@ -30985,26 +30985,21 @@ wwv_flow_imp_page.create_page_da_action(
 'var selectedRecords = grid.getSelectedRecords();',
 'console.log("Selected records object: ", selectedRecords);',
 '',
-'// Initialize an array to hold the IDs',
+'// record''s ID is going to be the first element in each selectedRecords object array',
+'',
 'var selectedIDs = [];',
 '',
-'// Access the inner array',
-'var innerArray = selectedRecords[0];',
-'console.log("innerArray  ", innerArray);',
-'',
-'// Loop through the inner array to populate selectedIDs',
-'for (var i = 0; i < innerArray.length; i++) {',
-'  console.log("Current record ID: ", innerArray[i][''ID'']);',
-'  selectedIDs.push(innerArray[i]);',
+'for (var i = 0; i < selectedRecords.length; i++) {',
+'  console.log("Current record ID: ", selectedRecords[i][0]);',
+'  selectedIDs.push(selectedRecords[i][0]);',
 '}',
 '',
-'// Convert array to a comma-separated string',
-'var selectedIDsString = selectedIDs[0];',
+'var selectedIDsString = selectedIDs.join('','');',
 'console.log("Selected IDs: " + selectedIDsString);',
 '',
 '// Set the Page Item value',
 '$s("P8_SELECTED_ID", selectedIDsString);',
-''))
+'apex.region("movieInteractiveGrid").refresh();'))
 );
 wwv_flow_imp_page.create_page_da_action(
  p_id=>wwv_flow_imp.id(11724943037196942)
@@ -31014,9 +31009,12 @@ wwv_flow_imp_page.create_page_da_action(
 ,p_execute_on_page_init=>'N'
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
 ,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'APEX_DEBUG.MESSAGE(''Selected IDs: %s'', :P8_SELECTED_ID);',
-'DELETE FROM movies WHERE ID = :P8_SELECTED_ID;',
-'COMMIT;'))
+'BEGIN',
+'  APEX_DEBUG.MESSAGE(''Selected IDs: %s'', :P8_SELECTED_ID);',
+'  DELETE FROM movies WHERE ID IN (SELECT REGEXP_SUBSTR(:P8_SELECTED_ID,''[^,]+'', 1, LEVEL) FROM DUAL CONNECT BY REGEXP_SUBSTR(:P8_SELECTED_ID, ''[^,]+'', 1, LEVEL) IS NOT NULL);',
+'  COMMIT;',
+'END;',
+''))
 ,p_attribute_02=>'P8_SELECTED_ID'
 ,p_attribute_05=>'PLSQL'
 ,p_wait_for_result=>'Y'
