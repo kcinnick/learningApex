@@ -33,7 +33,7 @@ prompt APPLICATION 108 - NSTV
 -- Application Export:
 --   Application:     108
 --   Name:            NSTV
---   Date and Time:   18:43 Saturday October 14, 2023
+--   Date and Time:   05:12 Sunday October 15, 2023
 --   Exported By:     LOWCODE
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -42,8 +42,8 @@ prompt APPLICATION 108 - NSTV
 --       Validations:              2
 --       Processes:               27
 --       Regions:                 71
---       Buttons:                 47
---       Dynamic Actions:         21
+--       Buttons:                 48
+--       Dynamic Actions:         22
 --     Shared Components:
 --       Logic:
 --         App Settings:           2
@@ -123,7 +123,7 @@ wwv_imp_workspace.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'NSTV'
 ,p_last_updated_by=>'LOWCODE'
-,p_last_upd_yyyymmddhh24miss=>'20231014182701'
+,p_last_upd_yyyymmddhh24miss=>'20231015042143'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>6
 ,p_print_server_type=>'NATIVE'
@@ -26286,7 +26286,7 @@ wwv_flow_imp_page.create_page(
 ,p_read_only_when_type=>'ALWAYS'
 ,p_page_component_map=>'21'
 ,p_last_updated_by=>'LOWCODE'
-,p_last_upd_yyyymmddhh24miss=>'20231014044037'
+,p_last_upd_yyyymmddhh24miss=>'20231015042143'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(10844266651956893)
@@ -30931,6 +30931,20 @@ wwv_flow_imp_page.create_page_button(
 ,p_grid_new_row=>'N'
 ,p_grid_new_column=>'N'
 );
+wwv_flow_imp_page.create_page_button(
+ p_id=>wwv_flow_imp.id(11725651940196949)
+,p_button_sequence=>40
+,p_button_name=>'DOWNLOAD_MOVIE_BTN'
+,p_button_static_id=>'downloadMovieButton'
+,p_button_action=>'DEFINED_BY_DA'
+,p_button_template_options=>'#DEFAULT#'
+,p_button_template_id=>wwv_flow_imp.id(10501672212580785)
+,p_button_is_hot=>'Y'
+,p_button_image_alt=>'Download Movie'
+,p_warn_on_unsaved_changes=>null
+,p_grid_new_row=>'N'
+,p_grid_new_column=>'N'
+);
 wwv_flow_imp_page.create_page_item(
  p_id=>wwv_flow_imp.id(11724095023196933)
 ,p_name=>'P8_SELECTED_ID'
@@ -31022,6 +31036,53 @@ wwv_flow_imp_page.create_page_da_action(
 ,p_attribute_02=>'P8_SELECTED_ID'
 ,p_attribute_05=>'PLSQL'
 ,p_wait_for_result=>'Y'
+);
+wwv_flow_imp_page.create_page_da_event(
+ p_id=>wwv_flow_imp.id(11725789023196950)
+,p_name=>'DownloadMovieButtonDynamicAction'
+,p_event_sequence=>70
+,p_triggering_element_type=>'BUTTON'
+,p_triggering_button_id=>wwv_flow_imp.id(11725651940196949)
+,p_bind_type=>'bind'
+,p_execution_type=>'IMMEDIATE'
+,p_bind_event_type=>'click'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(11892351095342702)
+,p_event_id=>wwv_flow_imp.id(11725789023196950)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_action=>'NATIVE_JAVASCRIPT_CODE'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'console.log("Button clicked!");',
+'',
+'// Get the grid',
+'var grid = apex.region("movieInteractiveGrid").widget().interactiveGrid("getViews", "grid");',
+'',
+'// Get selected records',
+'var selectedRecords = grid.getSelectedRecords();',
+'',
+'// log selected records',
+'console.log("selectedRecords :", selectedRecords);',
+'',
+'// Assume title is the first field in the selected record',
+'var movieTitle = selectedRecords[0][112];  // Replace with actual field index',
+'',
+'console.log("Movie title: ", movieTitle);',
+'',
+'// Call Django API to get the corresponding Django ID',
+'$.get(`http://127.0.0.1:8000/movies/search/?title=${movieTitle}`, function(data) {',
+'  // data.id should contain the Django ID',
+'  console.log("Django ID:", data.id);',
+'',
+'  $.get(`http://127.0.0.1:8000/movies/${data.id}/download`, function(data) {',
+'  })',
+'  .fail(function(error) {',
+'    console.log("Error:", error);',
+'  });',
+'});',
+''))
 );
 wwv_flow_imp_page.create_page_process(
  p_id=>wwv_flow_imp.id(11008506436957025)
