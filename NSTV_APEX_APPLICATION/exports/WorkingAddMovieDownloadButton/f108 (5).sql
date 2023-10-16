@@ -33,7 +33,7 @@ prompt APPLICATION 108 - NSTV
 -- Application Export:
 --   Application:     108
 --   Name:            NSTV
---   Date and Time:   05:12 Sunday October 15, 2023
+--   Date and Time:   05:52 Monday October 16, 2023
 --   Exported By:     LOWCODE
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -123,7 +123,7 @@ wwv_imp_workspace.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'NSTV'
 ,p_last_updated_by=>'LOWCODE'
-,p_last_upd_yyyymmddhh24miss=>'20231015042143'
+,p_last_upd_yyyymmddhh24miss=>'20231016054944'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>6
 ,p_print_server_type=>'NATIVE'
@@ -26286,7 +26286,7 @@ wwv_flow_imp_page.create_page(
 ,p_read_only_when_type=>'ALWAYS'
 ,p_page_component_map=>'21'
 ,p_last_updated_by=>'LOWCODE'
-,p_last_upd_yyyymmddhh24miss=>'20231015042143'
+,p_last_upd_yyyymmddhh24miss=>'20231016054944'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(10844266651956893)
@@ -26924,17 +26924,12 @@ wwv_flow_imp_page.create_region_column(
 ,p_source_type=>'DB_COLUMN'
 ,p_source_expression=>'DIRECTORS'
 ,p_data_type=>'VARCHAR2'
-,p_session_state_data_type=>'VARCHAR2'
 ,p_is_query_only=>false
 ,p_item_type=>'NATIVE_TEXT_FIELD'
 ,p_heading=>'Directors'
 ,p_heading_alignment=>'LEFT'
 ,p_display_sequence=>320
 ,p_value_alignment=>'LEFT'
-,p_attribute_01=>'N'
-,p_attribute_02=>'N'
-,p_attribute_03=>'N'
-,p_attribute_04=>'TEXT'
 ,p_attribute_05=>'BOTH'
 ,p_is_required=>false
 ,p_max_length=>50
@@ -27419,9 +27414,6 @@ wwv_flow_imp_page.create_region_column(
 ,p_duplicate_value=>true
 ,p_include_in_export=>false
 );
-end;
-/
-begin
 wwv_flow_imp_page.create_region_column(
  p_id=>wwv_flow_imp.id(10899680220956943)
 ,p_name=>'MEDIA_AUDIO_CHANNELS'
@@ -27441,6 +27433,9 @@ wwv_flow_imp_page.create_region_column(
 ,p_duplicate_value=>true
 ,p_include_in_export=>false
 );
+end;
+/
+begin
 wwv_flow_imp_page.create_region_column(
  p_id=>wwv_flow_imp.id(10900654767956943)
 ,p_name=>'MEDIA_AUDIO_CODEC'
@@ -28568,9 +28563,6 @@ wwv_flow_imp_page.create_region_column(
 ,p_duplicate_value=>true
 ,p_include_in_export=>false
 );
-end;
-/
-begin
 wwv_flow_imp_page.create_region_column(
  p_id=>wwv_flow_imp.id(10958545845956984)
 ,p_name=>'SUMMARY'
@@ -28590,6 +28582,9 @@ wwv_flow_imp_page.create_region_column(
 ,p_duplicate_value=>true
 ,p_include_in_export=>false
 );
+end;
+/
+begin
 wwv_flow_imp_page.create_region_column(
  p_id=>wwv_flow_imp.id(10959584113956985)
 ,p_name=>'TAGLINE'
@@ -29698,9 +29693,6 @@ wwv_flow_imp_page.create_ig_report_column(
 ,p_is_visible=>true
 ,p_is_frozen=>false
 );
-end;
-/
-begin
 wwv_flow_imp_page.create_ig_report_column(
  p_id=>wwv_flow_imp.id(10859077288956911)
 ,p_view_id=>wwv_flow_imp.id(10845902572956897)
@@ -29717,6 +29709,9 @@ wwv_flow_imp_page.create_ig_report_column(
 ,p_is_visible=>true
 ,p_is_frozen=>false
 );
+end;
+/
+begin
 wwv_flow_imp_page.create_ig_report_column(
  p_id=>wwv_flow_imp.id(10861036113956912)
 ,p_view_id=>wwv_flow_imp.id(10845902572956897)
@@ -30757,9 +30752,6 @@ wwv_flow_imp_page.create_ig_report_column(
 ,p_is_visible=>true
 ,p_is_frozen=>false
 );
-end;
-/
-begin
 wwv_flow_imp_page.create_ig_report_column(
  p_id=>wwv_flow_imp.id(10990978469957012)
 ,p_view_id=>wwv_flow_imp.id(10845902572956897)
@@ -30776,6 +30768,9 @@ wwv_flow_imp_page.create_ig_report_column(
 ,p_is_visible=>true
 ,p_is_frozen=>false
 );
+end;
+/
+begin
 wwv_flow_imp_page.create_ig_report_column(
  p_id=>wwv_flow_imp.id(10992930896957013)
 ,p_view_id=>wwv_flow_imp.id(10845902572956897)
